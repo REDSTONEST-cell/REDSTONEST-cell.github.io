@@ -3,51 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>桀桀桀</title>
+    <title>上传纪录及收藏</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
-        // 尝试唤起微信的函数
-        function openWeChat() {
-            // 微信的URL Scheme，不同平台可能有所不同
-            const wechatSchemes = [
-                'weixin://',          // 通用微信Scheme
-                'wechat://',          // 部分设备可能使用这个
-                'weixin://dl/business/' // 微信商务版Scheme
-            ];
-            
-            // 尝试不同的Scheme
-            wechatSchemes.some(scheme => {
-                try {
-                    // 创建隐藏的链接并触发点击
-                    const link = document.createElement('a');
-                    link.href = scheme;
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    
-                    // 检查是否成功唤起
-                    setTimeout(() => {
-                        // 如果5秒后页面仍在，说明唤起失败
-                        alert('上传成功');
-                    }, 5000);
-                    return true;
-                } catch (e) {
-                    console.log(`尝试使用${scheme}失败:`, e);
-                    return false;
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981', // 成功绿色
+                        secondary: '#3B82F6', // 按钮蓝色
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
                 }
-            });
+            }
         }
-        
-        // 页面加载完成后自动执行
-        window.onload = openWeChat;
     </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .animate-bounce-slow {
+                animation: bounce 2s infinite;
+            }
+        }
+    </style>
 </head>
-<body>
-    <div style="text-align: center; padding: 50px;">
-        <h1>正在上传你的浏览器收藏和纪录...</h1>
-        <button onclick="openWeChat()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
-            重新上传
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 text-center transform transition-all duration-300 hover:shadow-xl">
+        <!-- 成功图标 -->
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fa fa-check text-4xl text-primary"></i>
+        </div>
+        
+        <!-- 标题 -->
+        <h1 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold text-gray-800 mb-4">上传成功</h1>
+        
+        <!-- 说明文字 -->
+        <p class="text-gray-500 mb-8 text-lg">您的浏览器历史记录和收藏已成功上传完成</p>
+        
+        <!-- 重新上传按钮 -->
+        <button onclick="location.reload()" class="w-full bg-secondary hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <i class="fa fa-refresh mr-2"></i>重新上传
         </button>
     </div>
+
+    <script>
+        // 页面加载完成后的动画效果
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('div[class*="max-w-md"]');
+            container.classList.add('opacity-0', 'translate-y-4');
+            
+            setTimeout(() => {
+                container.classList.remove('opacity-0', 'translate-y-4');
+                container.classList.add('opacity-100', 'translate-y-0', 'transition-all', 'duration-500');
+            }, 100);
+        });
+    </script>
 </body>
 </html>
